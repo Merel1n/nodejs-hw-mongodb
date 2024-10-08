@@ -29,8 +29,9 @@ app.get("/contacts", async (req, res)=>{
   }
 })
 app.get("/contacts/:contactId", async(req,res)=>{
+  const {id}=req.params;
   try {
-    const contacts = await Contact.findById();
+      const contact = await Contact.findById(id);
 
     if (contact === null) {
       return res.status(404).send('Contact no found');
@@ -38,7 +39,7 @@ app.get("/contacts/:contactId", async(req,res)=>{
 
     res.status(200).json({
       status: 200,
-      message: `Successfully found contact with id ${contactId}!`,
+      message: `Successfully found contact with id ${id}!`,
       data: contact,
     });
   } catch (error) {

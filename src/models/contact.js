@@ -2,24 +2,26 @@ import mongoose from 'mongoose';
 
 const contactSchema = new mongoose.Schema({
     name : {
-        type:string, 
-        required:true
+        type: 'string', 
+        required: true
     },
-    phoneNumber : {
-        type:string, 
-        required:true
+    phoneNumber : { 
+        type: 'string', 
+        required: true
     },
-    email : string,
+    email : 'string',
     isFavourite: {
-        type:boolean, 
-        default:false
+        type: 'boolean', 
+        default: false
     },
     contactType : {
-        type: string, 
-        enum:["work", "home", "personal"], 
-        required:true, 
-        default:"personal"
+        type: 'string', 
+        enum: ["work", "home", "personal"], 
+        required: true, 
+        default: "personal"
     },
+    
+},{
     timestamps: true,
 });
 

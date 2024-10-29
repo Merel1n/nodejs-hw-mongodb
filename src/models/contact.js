@@ -20,8 +20,13 @@ const contactSchema = new Schema({
         required: true, 
         default: "personal"
     },
+    isFavourite: {
+        type: Boolean,
+        default: false,
+      },
     
 },{
+    versionKey: false, 
     timestamps: true,
 });
 

@@ -8,7 +8,7 @@ export const registerUser = async (payload) => {
  
   const user = await UsersCollection.findOne({email: payload.email});
  
-  if (!user){
+  if (user !== null){
     throw createHttpError(409, "Email in use");
   };
 

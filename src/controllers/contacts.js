@@ -69,13 +69,13 @@ export const createContactController = async (req, res) => {
 
 export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
-  const contactById =  await Contact.findById({_id: contactId, userId:req.user.id});
+  const contactOne =  await Contact.findOne({_id: contactId, userId:req.user.id});
 
-  if (req.user.id.toString()!== contactById.userId.toString()){
+  if (req.user.id.toString()!== contactOne.userId.toString()){
     next(createHttpError(404, 'Contact not found'));
   };
 
-  const result = await updateContact(contactId, req.body);
+  const result = await updateContact(contactOne, req.body);
 
   if (!result) {
     next(createHttpError(404, 'Contact not found'));
@@ -91,12 +91,12 @@ export const patchContactController = async (req, res, next) => {
 
 export const deleteContactController = async (req, res, next) => {
   const { contactId } = req.params;
-  const contactById =  await Contact.findById({_id: contactId, userId:req.user.id});
+  const contactOne =  await Contact.findOne({_id: contactId, userId:req.user.id});
 
-  if (req.user.id.toString()!== contactById.userId.toString()){
+  if (req.user.id.toString()!== contactOne.userId.toString()){
     next(createHttpError(404, 'Contact not found'));
   };
-  const contact = await deleteContact({_id: contactId, userId:req.user.id});
+  const contact = await deleteContact(contactOne);
 
   if (!contact) {
     next(createHttpError(404, 'Contact not found'));

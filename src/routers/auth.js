@@ -1,7 +1,7 @@
 import {Router, json} from "express";
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { loginUserSchema, registerUserSchema } from '../validation/auth.js';
-import { registerUserController, loginUserController, logoutUserController, refreshUserController } from '../controllers/auth.js';
+import { loginUserSchema, registerUserSchema, requestResetEmailSchema, resetPasswordSchema } from '../validation/auth.js';
+import { registerUserController, loginUserController, logoutUserController, refreshUserController, requestResetEmailController, resetPasswordController } from '../controllers/auth.js';
 import { validateBody } from '../middlewares/validateBody.js';
 
 const authRoutes = Router();
@@ -23,5 +23,17 @@ authRoutes.post(
 authRoutes.post("/logout", ctrlWrapper(logoutUserController));
 
 authRoutes.post("/refresh", ctrlWrapper(refreshUserController));
+
+authRoutes.post(
+  '/request-reset-email',
+  validateBody(requestResetEmailSchema),
+  ctrlWrapper(requestResetEmailController),
+);
+
+authRoutes.post(
+  '/reset-password',
+  validateBody(resetPasswordSchema),
+  ctrlWrapper(resetPasswordController),
+);
 
 export default authRoutes;

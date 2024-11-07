@@ -9,6 +9,9 @@ import {
   updateContact,
 } from '../services/contacts.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
+import { env } from '../utils/env.js';
 
 export async function GetAllContactsController(req, res, next) {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -54,6 +57,7 @@ export const createContactController = async (req, res) => {
       contactType: req.body.contactType,
       isFavourite: req.body.isFavourite,
       userId: req.user.id,
+      photo: req.body.photo
   });
 
   res.status(201).json({
@@ -65,8 +69,19 @@ export const createContactController = async (req, res) => {
 
 export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
+  const photo = req.file;
 
-  const result = await updateContact({_id: contactId, userId:req.user.id}, req.body);
+  let photoUrl;
+
+  if (photo) {
+    if (env('ENABLE_CLOUDINARY') === 'true') {
+      photoUrl = await saveFileToCloudinary(photo);
+    } else {
+      photoUrl = await saveFileToUploadDir(photo);
+    }
+  }
+
+  const result = await updateContact({_id: contactId, userId:req.user.id}, {...req.body, photo: photoUrl});
 
   if (!result) {
     next(createHttpError(404, 'Contact not found'));

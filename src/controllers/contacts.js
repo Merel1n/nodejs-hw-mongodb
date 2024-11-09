@@ -48,39 +48,22 @@ export async function GetContactByIDController(req, res, next) {
   });
 }
 
+
+
 export const createContactController = async (req, res) => {
 
-  let photoUrl=null;
+  const photo = req.file;
 
-  if (typeof req.file !== 'undefined') {
+  let avatar;
+ 
+  if (req.file) {
     if (env('ENABLE_CLOUDINARY') === 'true') {
-      const result = await saveFileToCloudinary(req.file.path);
-      await fs.unlink(req.file.path);
-      avatar = result.secure_url;
+      avatar = await saveFileToCloudinary(photo);
     } else {
-      photoUrl = await saveFileToUploadDir(req.file.path);
+      avatar = await saveFileToUploadDir(photo);
     }
   }
 
-  // let avatar = null;
-
-  // if (typeof req.file !== 'undefined') {
-  //   if (process.env.ENABLE_CLOUDINARY === 'true') {
-  //     const result = await saveFileToCloudinary(req.file.path);
-  //     await fs.unlink(req.file.path);
-
-  //     avatar = result.secure_url;
-  //   } else {
-  //     await fs.rename(
-  //       req.file.path,
-  //       path.resolve('src', 'public/avatars', req.file.filename),
-  //     );
-
-  //     // avatar = `http://localhost:8080/avatars/${req.file.filename}`;
-  //   }
-  // }
-
-  
   const contact = await createContact({
       name: req.body.name,
       phoneNumber: req.body.phoneNumber,
@@ -88,7 +71,7 @@ export const createContactController = async (req, res) => {
       contactType: req.body.contactType,
       isFavourite: req.body.isFavourite,
       userId: req.user.id,
-      photo: photoUrl
+      photo: avatar
   });
 
   res.status(201).json({

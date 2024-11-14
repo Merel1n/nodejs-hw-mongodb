@@ -14,12 +14,11 @@ requestBody:
           - name
           - phoneNumber
           - contactType
-          - userId
         properties:
           name:
             description: "Contact's name"
             type: string
-            example: 'Jon Doe'
+            example: 'John Doe'
           phoneNumber:
             description: "Contact's phone number"
             type: string

@@ -11,10 +11,6 @@ const contactSchema = new Schema(
       required: true,
     },
     email: String,
-    isFavourite: {
-      type: Boolean,
-      default: false,
-    },
     contactType: {
       type: String,
       enum: ['work', 'home', 'personal'],

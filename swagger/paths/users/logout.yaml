@@ -1,0 +1,49 @@
+tags:
+  - Auth
+summary: Logout a user
+operationId: logoutUser
+description: Logout a user by email and password.
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - email
+          - password
+        properties:
+          email:
+            type: string
+            format: email
+            description: User's email address
+          password:
+            type: string
+            description: User's password
+            format: password
+responses:
+  '204':
+    description: Creates a product
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: User successfully logout in
+  '400':
+    $ref: ../../components/responses/400.yaml
+  '401':
+    $ref: ../../components/responses/401.yaml
+  '404':
+    $ref: ../../components/responses/404.yaml
+  '500':
+    $ref: '../../components/responses/500.yaml'
